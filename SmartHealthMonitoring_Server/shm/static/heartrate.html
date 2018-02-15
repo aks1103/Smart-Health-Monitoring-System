@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+{% load static %}
+
+<script src="{% static 'jquery.min.js' %}"></script>
+<script src="{% static 'canvasjs.min.js' %}"></script>
+
+
+<style type="text/css">
+	.hell :active{
+		border: none;
+	}
+</style>
+<script>
+var counter=0 ; 
+var iuy;
+var success;
+
+
+var beep = function(){};
+var beep1 = function() {
+    var snd = new Audio("data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQVWI6GwRcfsZAcsKkJvxgxEjzFUgfHoSQ9Qq7KNwqHwuB13MA4a1q/DmBrHgPcmjiGoh//EwC5nGPEmS4RcfkVKOhJf+WOgoxJclFz3kgn//dBA+ya1GhurNn8zb//9NNutNuhz31f////9vt///z+IdAEAAAK4LQIAKobHItEIYCGAExBwe8jcToF9zIKrEdDYIuP2MgOWFSE34wYiR5iqQPj0JIeoVdlG4VD4XA67mAcNa1fhzA1jwHuTRxDUQ//iYBczjHiTJcIuPyKlHQkv/LHQUYkuSi57yQT//uggfZNajQ3Vmz+Zt//+mm3Wm3Q576v////+32///5/EOgAAADVghQAAAAA//uQZAUAB1WI0PZugAAAAAoQwAAAEk3nRd2qAAAAACiDgAAAAAAABCqEEQRLCgwpBGMlJkIz8jKhGvj4k6jzRnqasNKIeoh5gI7BJaC1A1AoNBjJgbyApVS4IDlZgDU5WUAxEKDNmmALHzZp0Fkz1FMTmGFl1FMEyodIavcCAUHDWrKAIA4aa2oCgILEBupZgHvAhEBcZ6joQBxS76AgccrFlczBvKLC0QI2cBoCFvfTDAo7eoOQInqDPBtvrDEZBNYN5xwNwxQRfw8ZQ5wQVLvO8OYU+mHvFLlDh05Mdg7BT6YrRPpCBznMB2r//xKJjyyOh+cImr2/4doscwD6neZjuZR4AgAABYAAAABy1xcdQtxYBYYZdifkUDgzzXaXn98Z0oi9ILU5mBjFANmRwlVJ3/6jYDAmxaiDG3/6xjQQCCKkRb/6kg/wW+kSJ5//rLobkLSiKmqP/0ikJuDaSaSf/6JiLYLEYnW/+kXg1WRVJL/9EmQ1YZIsv/6Qzwy5qk7/+tEU0nkls3/zIUMPKNX/6yZLf+kFgAfgGyLFAUwY//uQZAUABcd5UiNPVXAAAApAAAAAE0VZQKw9ISAAACgAAAAAVQIygIElVrFkBS+Jhi+EAuu+lKAkYUEIsmEAEoMeDmCETMvfSHTGkF5RWH7kz/ESHWPAq/kcCRhqBtMdokPdM7vil7RG98A2sc7zO6ZvTdM7pmOUAZTnJW+NXxqmd41dqJ6mLTXxrPpnV8avaIf5SvL7pndPvPpndJR9Kuu8fePvuiuhorgWjp7Mf/PRjxcFCPDkW31srioCExivv9lcwKEaHsf/7ow2Fl1T/9RkXgEhYElAoCLFtMArxwivDJJ+bR1HTKJdlEoTELCIqgEwVGSQ+hIm0NbK8WXcTEI0UPoa2NbG4y2K00JEWbZavJXkYaqo9CRHS55FcZTjKEk3NKoCYUnSQ0rWxrZbFKbKIhOKPZe1cJKzZSaQrIyULHDZmV5K4xySsDRKWOruanGtjLJXFEmwaIbDLX0hIPBUQPVFVkQkDoUNfSoDgQGKPekoxeGzA4DUvnn4bxzcZrtJyipKfPNy5w+9lnXwgqsiyHNeSVpemw4bWb9psYeq//uQZBoABQt4yMVxYAIAAAkQoAAAHvYpL5m6AAgAACXDAAAAD59jblTirQe9upFsmZbpMudy7Lz1X1DYsxOOSWpfPqNX2WqktK0DMvuGwlbNj44TleLPQ+Gsfb+GOWOKJoIrWb3cIMeeON6lz2umTqMXV8Mj30yWPpjoSa9ujK8SyeJP5y5mOW1D6hvLepeveEAEDo0mgCRClOEgANv3B9a6fikgUSu/DmAMATrGx7nng5p5iimPNZsfQLYB2sDLIkzRKZOHGAaUyDcpFBSLG9MCQALgAIgQs2YunOszLSAyQYPVC2YdGGeHD2dTdJk1pAHGAWDjnkcLKFymS3RQZTInzySoBwMG0QueC3gMsCEYxUqlrcxK6k1LQQcsmyYeQPdC2YfuGPASCBkcVMQQqpVJshui1tkXQJQV0OXGAZMXSOEEBRirXbVRQW7ugq7IM7rPWSZyDlM3IuNEkxzCOJ0ny2ThNkyRai1b6ev//3dzNGzNb//4uAvHT5sURcZCFcuKLhOFs8mLAAEAt4UWAAIABAAAAAB4qbHo0tIjVkUU//uQZAwABfSFz3ZqQAAAAAngwAAAE1HjMp2qAAAAACZDgAAAD5UkTE1UgZEUExqYynN1qZvqIOREEFmBcJQkwdxiFtw0qEOkGYfRDifBui9MQg4QAHAqWtAWHoCxu1Yf4VfWLPIM2mHDFsbQEVGwyqQoQcwnfHeIkNt9YnkiaS1oizycqJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");  
+    snd.play();
+}
+
+
+var bclick;
+var updateInterval = 1000;
+
+window.onload = function () {
+
+var t = "3";
+var dps = []; // dataPoints
+var chart = new CanvasJS.Chart("chartContainer", {
+	title :{
+		text: ""
+	},
+	axisY: {
+		includeZero: true
+	},      
+	data: [{
+		type: "line",
+		dataPoints: dps
+	}]
+});
+
+
+var qwe = function(count,type){
+
+
+	$('#charttitle').html(t);	
+	var url = "/" +  type+"/";
+	var data = "";
+
+success = function(data){
+
+	console.log(data);
+		if(counter > 11)	beep1();
+
+	if(t=="1"){
+		data = 0;
+		updateInterval = 1000;
+		if(data < 150){
+			updateChart(count , parseInt(data));
+			$('#data').html("<p style='color:Red'>Beat Detected. Current Heart Rate: "+data+"</p>");
+		}
+		else{
+			updateChart(count , 0);
+			$('#data').html("<p></p>");	
+		}
+
+	 	console.log(data);	
+	}else if(t == "2"){
+		data = 0;
+		data = 0;
+
+		updateInterval = 1000;
+		if(data != -1){
+			updateChart(count , parseInt(data));
+
+			if(data < 40)
+				data = data/8;
+			else
+				data = (data - 32 )/3.03403698;
+
+			if(data < 40){
+				beep();
+				$('#data').html("<p style='color:Red'>Brightness Status: Very Dim</p>");
+			}
+			else if(data < 80){
+				beep();
+				$('#data').html("<p style='color:Red'>Brightness Status:  Dim</p>");
+			}
+			else if(data < 120){
+				beep();
+				$('#data').html("<p style='color:Red'>Brightness Status: Normal</p>");
+			}
+			else if(data < 180){
+				beep();
+				$('#data').html("<p style='color:Red'>Brightness Status: Bright</p>");
+			}
+			else if(data < 250){
+				beep();
+				$('#data').html("<p style='color:Red'>Brightness Status: Very Bright</p>");
+			}
+			else{
+				$('#data').html("<p style='color:Red'>Brightness Status: Very Very Bright</p>");
+				beep();
+			}
+		
+			$('#flux').html("<p style='color:Green'> Flux Intensity is: "+data+"</p>");
+		}
+
+		console.log(data);
+	}else if(t == "3"){
+		updateInterval = 10;
+		if(data!=-1)
+		{
+			updateChart(count , parseInt(data));	
+			$('#flux').html("<p style='color:Green'> Steps as of now: "+counter+"</p>");
+			// $('#data').html("<p style='color:Green'> Calo: "+counter+"</p>");
+
+		}
+
+		console.log(data);
+
+
+	}else if(t == "4"){
+		updateInterval = 30000;
+		if(data!=-1)
+			updateChart(count , parseInt(data));
+	 		console.log(data);
+	}else if(t == "5"){
+		updateInterval = 500;
+		if(data!=-1)
+			updateChart(count , parseInt(data));
+	 		console.log(data);
+	}else if(t == "6"){
+		console.log("Chair On another unit");
+	}
+}
+
+
+// $.ajax({
+//   url: url,
+//   data: data,
+//   success: success
+// });
+
+
+
+
+}
+
+
+iuy = function(){
+	counter+=1;
+};
+
+
+setInterval(function(){success(counter); }, 1000);
+
+var xVal = 0;
+var yVal = 100; 
+var dataLength = 20; // number of dataPoints visible at any point
+var count ;
+var updateChart = function (count, y) {
+
+	 count = count || 1;
+
+
+	for (var j = 0; j < count; j++) {
+		yVal = y;
+		dps.push({
+			x: xVal,
+			y: yVal
+		});
+		xVal++;
+	}
+
+	if (dps.length > dataLength) {
+		dps.shift();
+	}
+
+	chart.render();
+};
+
+// qwe(15);
+updateChart(dataLength);
+var aaa = setInterval(function(){qwe(1,t);}, updateInterval);
+
+	 bclick = function(type){ 
+
+		t = type;
+		qwe(1,type);
+
+		 if(t == "pushupdata"){
+		 	clearInterval(aaa);
+		 	updateInterval = 10;
+		 	aaa = setInterval(function(){qwe(1,t);}, updateInterval);
+
+		 }else {
+		 	clearInterval(aaa);
+		 	updateInterval = 1000;
+		 	aaa = setInterval(function(){qwe(1,t);}, updateInterval);
+		 }
+	}
+}
+
+// var f = function(){
+// 	qwe("pedodata");
+// 	bclick("pedodata2");
+
+// };
+</script>
+</head>
+<body>
+<center><h1 id="">Pedometer</h1></center>
+<div id="chartContainer" style="height: 370px; width:100%;"></div>
+
+<center>
+<div id="flux"></div>
+<!-- <div id="data"></div> -->
+
+<button type="radio" name="type" id="type1" onclick="bclick('1');">Sleep Data</button>
+<button type="radio" name="type" id="type2" onclick="bclick('2');">LDR Data</button>
+<button type="radio" name="type" id="type3" onclick="bclick('3');">Pedometer Data</button>
+<button type="radio" name="type" id="type4" onclick="bclick('4');">PushUp Data</button>
+<button type="radio" name="type" id="type5" onclick="bclick('5');">Chair Data</button>
+<br>
+
+<button class="hell" onclick="iuy();" style="outline: 0;width:300px;height:30px;border: none;background:#ffffff;"></button>
+</center>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+{% load static %}
+
+	<script src="{% static 'jquery.min.js' %}"></script>
+<script src="{% static 'canvasjs.min.js' %}"></script>
+<script>
+
+
+window.onload = function () {
+
+var dps = []; // dataPoints
+var chart = new CanvasJS.Chart("chartContainer", {
+	title :{
+		text: "PushUp Data"
+	},
+	axisY: {
+		includeZero: true
+	},      
+	data: [{
+		type: "line",
+		dataPoints: dps
+	}]
+});
+
+
+var qwe = function(count){
+
+var url = "http://127.0.0.1:8000/pushupdata/";
+var data = "";
+var success = function(data){
+	if(data!=-1)
+	{
+	updateChart(count , parseInt(data));	
+	$('#flux').html("<p style='color:Green'> PushUps as of now: "+data+"</p>");
+	}	 console.log(data);
+}
+
+
+$.ajax({
+  url: url,
+  data: data,
+  success: success
+});
+
+
+}
+
+
+var xVal = 0;
+var yVal = 100; 
+var updateInterval = 10;
+var dataLength = 20; // number of dataPoints visible at any point
+var count ;
+var updateChart = function (count, y) {
+
+	 count = count || 1;
+
+
+	for (var j = 0; j < count; j++) {
+		yVal = y;
+		dps.push({
+			x: xVal,
+			y: yVal
+		});
+		xVal++;
+	}
+
+	if (dps.length > dataLength) {
+		dps.shift();
+	}
+
+	chart.render();
+};
+
+updateChart(dataLength);
+setInterval(qwe, updateInterval);
+
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; width:100%;"></div>
+<div id="flux"></div>
+</body>
+</html>
